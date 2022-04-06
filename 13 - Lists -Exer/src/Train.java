@@ -1,0 +1,47 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class Train {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> wagons = Arrays.stream(scanner.nextLine()
+                .split(" "))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+        int maxCapacity = Integer.parseInt(scanner.nextLine());
+        String command = scanner.nextLine();
+
+        while (!command.equals("end")) {
+            //"Add {passengers}" -> {Add, 5}
+            // "passengers"} -> {45}
+            String[] commandData = command.split(" ");
+
+            if (commandData[0].equals("Add")) {
+                //command - "Add"
+                int passengers = Integer.parseInt(commandData[1]);
+                wagons.add(passengers);
+            } else {
+                int passengersToAdd = Integer.parseInt(commandData[0]);
+
+                for (int index = 0; index < wagons.size(); index++) {
+                    int currentWagon = wagons.get(index);
+
+                    if (currentWagon + passengersToAdd <= maxCapacity) {
+                        wagons.set(index, currentWagon + passengersToAdd);
+                        //wagons.remove(index+1); - вместо сет
+                        break;
+                    }
+                }
+            }
+            command = scanner.nextLine();
+        }
+
+        for (int wagon : wagons) {
+            System.out.print(wagon + " ");
+            // Или съкратено wagons.forEach(wagon -> System.out.print(wagon + " "));
+        }
+    }
+}
